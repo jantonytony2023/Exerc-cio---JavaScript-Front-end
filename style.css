@@ -1,0 +1,78 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+#ipInput, button {
+    padding: 10px;
+    font-size: 1rem;
+    margin: 8px 4px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+#ipTable {
+    width: 100%;
+    max-width: 400px;
+    border-collapse: collapse;
+    margin-top: 24px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+#ipTable th, #ipTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#ipTable th {
+    background: #f0f0f0;
+}
+
+@media (max-width: 500px) {
+    .container {
+        padding: 4px;
+    }
+    #ipTable, #ipTable th, #ipTable td {
+        font-size: 0.9rem;
+    }
+    #ipTable {
+        max-width: 100%;
+    }
+    #ipInput, button {
+        width: 100%;
+        margin: 6px 0;
+        box-sizing: border-box;
+    }
+}
