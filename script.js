@@ -1,8 +1,7 @@
-const token = 'c69a2b4a8bc42e'; // Substitua pelo seu token do Ipinfo.io
+const token = 'c69a2b4a8bc42e'; 
 
 async function fetchIPInfo() {
     try {
-        // Pega o IP digitado pelo usuário
         const ipInput = document.getElementById('ipInput');
         const userIP = ipInput && ipInput.value ? ipInput.value : '';
 
@@ -11,31 +10,66 @@ async function fetchIPInfo() {
             return;
         }
 
-        // Busca informações do IP usando Ipinfo
         const response = await fetch(`https://ipinfo.io/${userIP}/json?token=${token}`);
         const data = await response.json();
 
         const tableBody = document.querySelector('#ipTable tbody');
-        tableBody.innerHTML = ''; // Limpa a tabela
 
-        // Preenche a tabela com os dados
-        for (const key in data) {
-            const row = document.createElement('tr');
-            const cellKey = document.createElement('td');
-            const cellValue = document.createElement('td');
+        // Verifica se o IP já está na tabela
+        let ipJaExiste = false;
+        Array.from(tableBody.querySelectorAll('tr')).forEach(tr => {
+            const ipNaTabela = tr.querySelector('td');
+            if (ipNaTabela && ipNaTabela.textContent === (data.ip || userIP)) {
+                ipJaExiste = true;
+            }
+        });
 
-            cellKey.textContent = key;
-            cellValue.textContent = data[key];
-
-            row.appendChild(cellKey);
-            row.appendChild(cellValue);
-            tableBody.appendChild(row);
+        if (ipJaExiste) {
+            alert('Este IP já se encontra na tabela.');
+            return;
         }
+
+        // Cria uma linha com IP, organização, país e cidade
+        const row = document.createElement('tr');
+
+        const ipCell = document.createElement('td');
+        ipCell.textContent = data.ip || userIP || 'N/A';
+
+        const orgCell = document.createElement('td');
+        if (data.org) {
+            // Remove o código AS e pega apenas o nome da organização
+            const orgParts = data.org.split(' ');
+            orgCell.textContent = orgParts.slice(1).join(' ') || data.org;
+        } else {
+            orgCell.textContent = 'N/A';
+        }
+
+        const countryCell = document.createElement('td');
+        countryCell.textContent = data.country || 'N/A';
+
+        const cityCell = document.createElement('td');
+        cityCell.textContent = data.city || 'N/A';
+
+        const actionCell = document.createElement('td');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '✖'; // Símbolo de X
+        deleteBtn.title = 'Excluir';
+        deleteBtn.onclick = function() {
+            row.remove();
+        };
+        actionCell.appendChild(deleteBtn);
+
+        row.appendChild(ipCell);
+        row.appendChild(orgCell);
+        row.appendChild(countryCell);
+        row.appendChild(cityCell);
+        row.appendChild(actionCell);
+
+        tableBody.appendChild(row);
 
     } catch (error) {
         console.error('Erro ao buscar informações do IP:', error);
     }
 }
 
-// Remova a chamada automática
-// fetchIPInfo();
+
